@@ -1,0 +1,30 @@
+﻿@inject NavigationManager NavigationManager
+
+<Router AppAssembly="@typeof(App).Assembly" OnNavigateAsync="@OnNavigateAsync">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>Not found</PageTitle>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <p role="alert">Sorry, there's nothing at this address.</p>
+        </LayoutView>
+    </NotFound>
+</Router>
+
+@code{
+    private void OnNavigateAsync(NavigationContext args)
+    {
+        var url = args.Path.ToLower() switch
+        {
+            "discord" => "https://discord.gg",
+            _ => ""
+        };
+
+        if (!string.IsNullOrEmpty(url))
+            NavigationManager.NavigateTo(url, true);
+
+        return;
+    }
+}
